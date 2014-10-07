@@ -1,16 +1,17 @@
 {
-  "name": "passport-local-mongoose",
-  "description": "Mongoose plugin that simplifies building username and password login with Passport",
+  "name": "passport-local-mongoose-email",
+  "description": "Mongoose plugin that simplifies building username and password login with Passport and email verification",
   "version": "1.0.0",
-  "main": "lib/passport-local-mongoose.js",
-  "repository": "git://github.com/saintedlama/passport-local-mongoose.git",
-  "author": "Christoph Walcher <christoph.walcher@gmail.com>",
+  "main": "lib/passport-local-mongoose-email.js",
+  "repository": "git://github.com/heitortsergent/passport-local-mongoose-email.git",
+  "author": "Heitor Sergent <heitortsergent@gmail.com>",
   "license": "MIT",
   "keywords": [
     "mongoose",
     "passport",
     "authentication",
-    "login"
+    "login",
+    "email"
   ],
   "engines": {
     "node": ">= 0.9"
