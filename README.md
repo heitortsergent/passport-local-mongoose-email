@@ -1,54 +1,48 @@
 # Passport-Local Mongoose Email
+
 Passport-Local Mongoose Email is based on [passport-local-mongoose](https://github.com/saintedlama/passport-local-mongoose). It's a [Mongoose](http://mongoosejs.com/) [plugin](http://mongoosejs.com/docs/plugins.html) 
-that simplifies building username and password login with [Passport](http://passportjs.org) and an email token verification.
+that simplifies building username and password login with [Passport](http://passportjs.org), together with an email token verification.
 
-[![Build Status](https://travis-ci.org/saintedlama/passport-local-mongoose.png?branch=master)](https://travis-ci.org/saintedlama/passport-local-mongoose)
-[![Coverage Status](https://coveralls.io/repos/saintedlama/passport-local-mongoose/badge.png?branch=master)](https://coveralls.io/r/saintedlama/passport-local-mongoose?branch=master)
-
-## Tutorials
-Michael Herman gives a comprehensible walk through for setting up mongoose,
-passport, passport-local and passport-local-mongoose for user authentication in his blog post [User Authentication With Passport.js](http://mherman.org/blog/2013/11/11/user-authentication-with-passport-dot-js/)
-
+[![Build Status](https://travis-ci.org/heitortsergent/passport-local-mongoose-email.png?branch=master)](https://travis-ci.org/heitortsergent/passport-local-mongoose)
+[![Coverage Status](https://coveralls.io/repos/heitortsergent/passport-local-mongoose-email/badge.png?branch=master)](https://coveralls.io/r/heitortsergent/passport-local-mongoose-email?branch=master)
 
 ## Installation
 
-    $ npm install passport-local-mongoose
+    $ npm install passport-local-mongoose-email
 
-Passport-Local Mongoose does not require `passport`, `passport-local` or `mongoose` dependencies directly but expects you
-to have these dependencies installed.
+Passport-Local Mongoose Email does not require `passport`, `passport-local` or `mongoose` dependencies directly but expects you to have these dependencies installed.
 
 In case you need to install the whole set of dependencies
 
-    $ npm install passport passport-local mongoose passport-local-mongoose --save
+    $ npm install passport passport-local mongoose passport-local-mongoose-email --save
 
 ## Usage
 
-### Plugin Passport-Local Mongoose
-First you need to plugin Passport-Local Mongoose into your User schema
+### Plugin Passport-Local Mongoose Email
+First you need to plugin Passport-Local Mongoose Email into your User schema
 
     var mongoose = require('mongoose'),
         Schema = mongoose.Schema,
-        passportLocalMongoose = require('passport-local-mongoose');
+        passportLocalMongooseEmail = require('passport-local-mongoose-email');
     
     var User = new Schema({});
     
-    User.plugin(passportLocalMongoose);
+    User.plugin(passportLocalMongooseEmail);
     
     module.exports = mongoose.model('User', User);
 
-You're free to define your User how you like. Passport-Local Mongoose will add a username, hash and salt field to store
-the username, the hashed password and the salt value.
+You're free to define your User how you like. Passport-Local Mongoose Email will add a username, hash and salt field to store the username, the hashed password and the salt value. It'll also add an authToken and an isAuthenticated field for use with the email verification part of it.
 
-Additionally Passport-Local Mongoose adds some methods to your Schema. See the API Documentation section for more details.
+Additionally Passport-Local Mongoose Email adds some methods to your Schema. See the API Documentation section for more details.
 
 ### Configure Passport/Passport-Local
 You should configure Passport/Passport-Local as described in [the Passport Guide](http://passportjs.org/guide/configure/).
 
-Passport-Local Mongoose supports this setup by implementing a `LocalStrategy` and serializeUser/deserializeUser functions.
+Passport-Local Mongoose Email supports this setup by implementing a `LocalStrategy` and serializeUser/deserializeUser functions.
 
-To setup Passport-Local Mongoose use this code
+To setup Passport-Local Mongoose Email use this code
 
-    // requires the model with Passport-Local Mongoose plugged in
+    // requires the model with Passport-Local Mongoose Email plugged in
     var User = require('./models/user');
     
     // use static authenticate method of model in LocalStrategy
@@ -60,25 +54,8 @@ To setup Passport-Local Mongoose use this code
 
 Make sure that you have a mongoose connected to mongodb and you're done.
 
-#### Simplified Passport/Passport-Local Configuration
-Starting with version 0.2.1 passport-local-mongoose adds a helper method `createStrategy` as static method to your schema.
-The `createStrategy` is responsible to setup passport-local `LocalStrategy` with the correct options.
-
-    var User = require('./models/user');
-    
-    // CHANGE: USE "createStrategy" INSTEAD OF "authenticate"
-    passport.use(User.createStrategy());
-    
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
-
-The reason for this functionality is that when using the `usernameField` option to specify an alternative usernameField name, 
-for example "email" passport-local would still expect your frontend login form to contain an input field with name "username"
-instead of email. This can be configured for passport-local but this is double the work. So we got this shortcut implemented.
-
 ### Options
-When plugging in Passport-Local Mongoose plugin additional options can be provided to configure
-the hashing algorithm.
+When plugging in Passport-Local Mongoose Email plugin additional options can be provided to configure the hashing algorithm.
 
     User.plugin(passportLocalMongoose, options);
 
@@ -112,14 +89,14 @@ __Error Message Options__
 *Attention!* Changing any of the hashing options (saltlen, iterations or keylen) in a production environment will prevent that existing users to authenticate!
 
 ### Hash Algorithm
-Passport-Local Mongoose use the pbkdf2 algorithm of the node crypto library. 
+Passport-Local Mongoose Email use the pbkdf2 algorithm of the node crypto library. 
 [Pbkdf2](http://en.wikipedia.org/wiki/PBKDF2) was chosen because platform independent
 (in contrary to bcrypt). For every user a generated salt value is saved to make
 rainbow table attacks even harder.
 
 ### Examples
 For a complete example implementing a registration, login and logout see the 
-[login example](https://github.com/saintedlama/passport-local-mongoose/tree/master/examples/login).
+[login example](https://github.com/heitortsergent/passport-local-mongoose-email/tree/master/examples/login).
 
 ## API Documentation
 ### Instance methods
@@ -138,9 +115,9 @@ Static methods are exposed on the model constructor. For example to use createSt
 * authenticate() Generates a function that is used in Passport's LocalStrategy
 * serializeUser() Generates a function that is used by Passport to serialize users into the session
 * deserializeUser() Generates a function that is used by Passport to deserialize users into the session
-* register(user, password, cb) Convenience method to register a new user instance with a given password. Checks if username is unique. See [login example](https://github.com/saintedlama/passport-local-mongoose/tree/master/examples/login).
+* register(user, password, cb) Convenience method to register a new user instance with a given password. Checks if username is unique. See [login example](https://github.com/heitortsergent/passport-local-mongoose-email/tree/master/examples/login).
 * findByUsername() Convenience method to find a user instance by it's unique username.
 * createStrategy() Creates a configured passport-local `LocalStrategy` instance that can be used in passport.
 
 ## License
-Passport-Local Mongoose is licenses under the [MIT license](http://opensource.org/licenses/MIT).
+Passport-Local Mongoose Email is licensed under the [MIT license](http://opensource.org/licenses/MIT).
