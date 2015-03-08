@@ -33,7 +33,7 @@ module.exports = function (app) {
       }
 
       //send email verification
-      var authenticationURL = 'http://localhost:3000/verify?token=' + account.token;
+      var authenticationURL = 'http://localhost:3000/verify?authToken=' + account.authToken;
       sendgrid.send({
         to:       account.username,
         from:     'emailauth@yourdomain.com',
@@ -41,7 +41,6 @@ module.exports = function (app) {
         html:     '<a target=_blank href=\"' + authenticationURL + '\">Confirm your email</a>'
         }, function(err, json) {
         if (err) { return console.error(err); }
-        console.log(json);
 
         res.redirect('/email-verification');
       });
@@ -53,11 +52,8 @@ module.exports = function (app) {
   });
 
   app.get('/verify', function(req, res) {
-    console.log('verify');
-    console.log(req.query.token);
-      Account.verifyEmail(req.query.token, function(err, existingAuthToken) {
+      Account.verifyEmail(req.query.authToken, function(err, existingAuthToken) {
         if(err) console.log('err:', err);
-        console.log('existingAuthToken', existingAuthToken);
 
         res.render('email-verification', { title : 'Email verified succesfully!' });
       });

@@ -13,7 +13,7 @@
     "mongoose": "3.8.x",
     "passport": "0.2.x",
     "passport-local": "1.0.x",
-    "passport-local-mongoose-email": "*",
+    "passport-local-mongoose-email": "^0.1.1",
     "sendgrid": "^1.6.0"
   }
 }
