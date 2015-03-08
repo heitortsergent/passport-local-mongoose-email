@@ -1,51 +1,51 @@
 var passport = require('passport');
 var Account = require('./models/account');
-var sendgrid = require('sendgrid')(SENDGRID_USERNAME, SENDGRID_PASSWORD);
+var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 
 module.exports = function (app) {
     
   app.get('/', function (req, res) {
-      res.render('index', { user : req.user });
+    res.render('index', { user : req.user });
   });
 
   app.get('/register', function(req, res) {
-      res.render('register', { });
+    res.render('register', { });
   });
 
 //register local
   app.post('/register-local', function(req, res) {
-      Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-          if (err) {
-            return res.render("register", {info: "Sorry. That username already exists. Try again."});
-          }
+    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+      if (err) {
+        return res.render("register", {info: "Sorry. That username already exists. Try again."});
+      }
 
-          passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
-          });
+      passport.authenticate('local')(req, res, function () {
+        res.redirect('/');
       });
+    });
   });
 
 //register email
   app.post('/register', function(req, res) {
-      Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-          if (err) {
-            return res.render("register", {info: "Sorry. That username already exists. Try again."});
-          }
+    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+      if (err) {
+        return res.render("register", {info: "Sorry. That username already exists. Try again."});
+      }
 
-          //send email verification
-          var authenticationURL = 'http://localhost:1337/verify?token=' + account.token;
-          sendgrid.send({
-            to:       account.username,
-            from:     'emailauth@yourdomain.com',
-            subject:  'Confirm your email',
-            html:     '<a target=_blank href=\"' + authenticationURL + '\">Confirm your email</a>'
-            }, function(err, json) {
-            if (err) { return console.error(err); }
-            console.log(json);
+      //send email verification
+      var authenticationURL = 'http://localhost:3000/verify?token=' + account.token;
+      sendgrid.send({
+        to:       account.username,
+        from:     'emailauth@yourdomain.com',
+        subject:  'Confirm your email',
+        html:     '<a target=_blank href=\"' + authenticationURL + '\">Confirm your email</a>'
+        }, function(err, json) {
+        if (err) { return console.error(err); }
+        console.log(json);
 
-            res.redirect('/email-verification');
-          });
+        res.redirect('/email-verification');
       });
+    });
   });
 
   app.get('/email-verification', function(req, res) {
@@ -64,22 +64,21 @@ module.exports = function (app) {
   });
 
   app.get('/login', function(req, res) {
-      res.render('login', { user : req.user });
+    res.render('login', { user : req.user });
   });
 
 //login needs to check for verified token, before letting the user log in
   app.post('/login', passport.authenticate('local'), function(req, res) {
-    console.log('login');
-      res.redirect('/');
+    res.redirect('/');
   });
 
   app.get('/logout', function(req, res) {
-      req.logout();
-      res.redirect('/');
+    req.logout();
+    res.redirect('/');
   });
 
   app.get('/ping', function(req, res){
-      res.send("pong!", 200);
+    res.send("pong!", 200);
   });
   
 };

@@ -45,7 +45,7 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 // Connect mongoose
-mongoose.connect('mongodb://localhost/passport_local_mongoose_examples');
+mongoose.connect('mongodb://localhost/passport_local_mongoose_email_examples');
 
 // Setup routes
 require('./routes')(app);
