@@ -1,3 +1,6 @@
+var dotenv = require('dotenv');
+dotenv.load();
+
 var path = require('path'),
     express = require('express'),
     http = require('http'),

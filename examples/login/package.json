@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "main": "app.js",
   "private": "true",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
+    "dotenv": "^0.5.1",
     "express": "3.5.x",
-    "jade" : "> 0.0.1",
+    "jade": "> 0.0.1",
     "mongoose": "3.8.x",
     "passport": "0.2.x",
     "passport-local": "1.0.x",

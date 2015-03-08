@@ -19,3 +19,4 @@ npm-debug.log
 README.html
 *.tgz
 docs/
+examples/login/.env
