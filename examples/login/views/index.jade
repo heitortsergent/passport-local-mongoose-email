@@ -1,5 +1,7 @@
 extends layout
 
 block content
+  p= info
+
   if (user)
-    You are currently logged in as #{user.username}
+    You are currently logged in as #{user.email}

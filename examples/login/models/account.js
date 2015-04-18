@@ -7,6 +7,8 @@ var Account = new Schema({
     birthdate: Date
 });
 
-Account.plugin(passportLocalMongooseEmail);
+Account.plugin(passportLocalMongooseEmail, {
+  usernameField: 'email',
+});
 
 module.exports = mongoose.model('Account', Account);

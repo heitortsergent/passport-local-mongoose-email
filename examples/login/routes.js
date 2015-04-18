@@ -12,22 +12,9 @@ module.exports = function (app) {
     res.render('register', { });
   });
 
-//register local
-  app.post('/register-local', function(req, res) {
-    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-      if (err) {
-        return res.render("register", {info: "Sorry. That username already exists. Try again."});
-      }
-
-      passport.authenticate('local')(req, res, function () {
-        res.redirect('/');
-      });
-    });
-  });
-
 //register email
   app.post('/register', function(req, res) {
-    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+    Account.register(new Account({ email : req.body.email }), req.body.password, function(err, account) {
       if (err) {
         return res.render("register", {info: "Sorry. That username already exists. Try again."});
       }
@@ -35,7 +22,7 @@ module.exports = function (app) {
       //send email verification
       var authenticationURL = 'http://localhost:3000/verify?authToken=' + account.authToken;
       sendgrid.send({
-        to:       account.username,
+        to:       account.email,
         from:     'emailauth@yourdomain.com',
         subject:  'Confirm your email',
         html:     '<a target=_blank href=\"' + authenticationURL + '\">Confirm your email</a>'
@@ -62,11 +49,16 @@ module.exports = function (app) {
   app.get('/login', function(req, res) {
     res.render('login', { user : req.user });
   });
-
-//login needs to check for verified token, before letting the user log in
-  app.post('/login', passport.authenticate('local'), function(req, res) {
-    res.redirect('/');
+  
+  app.get('/unauthorized', function(req, res) {
+    res.render('index', { info : "Unauthorized" });
   });
+
+  //login needs to check for verified token, before letting the user log in
+  app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/unauthorized'
+  }));
 
   app.get('/logout', function(req, res) {
     req.logout();
