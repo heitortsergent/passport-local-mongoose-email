@@ -1,5 +1,7 @@
 # Passport-Local Mongoose Email
 
+__Important: This package is not being maintained anymore.__
+
 Passport-Local Mongoose Email is based on [passport-local-mongoose](https://github.com/saintedlama/passport-local-mongoose). It's a [Mongoose](http://mongoosejs.com/) [plugin](http://mongoosejs.com/docs/plugins.html) 
 that simplifies building username and password login with [Passport](http://passportjs.org), together with an email token verification.
 
